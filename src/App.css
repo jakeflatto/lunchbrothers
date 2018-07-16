@@ -8,13 +8,7 @@
 }*/
 
 .App-header {
-  height: 500px;
   color: white;
-  background-image: url("punch_slider.jpg");
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-position: center;
-  position: relative;
 }
 
 .App-title {
@@ -30,12 +24,9 @@
   to { transform: rotate(360deg); }
 }*/
 
-ul {
-  list-style-type: none;
-}
-
 .Pun {
   padding: 5px;
+  color: white;
 }
 
 form {
@@ -50,16 +41,26 @@ input {
 
 .tagline {
   position: absolute;
-  bottom: 10px;
   display: block;
   width: 100%;
-  font-size: 30px;
-  color: bla;
+  color: black;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  margin-bottom: 10px;
 }
 
 .main-card {
-  width: 500px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 25px;
+  width: 600px;
+  height: 500px;
+  margin: auto;
+  margin-top: 10%;
+  margin-bottom: auto;
+  padding-top: auto;
+  padding-bottom: auto;
+  vertical-align: middle;
+  position: relative;
+}
+
+.card-media {
+  height: 300px;
 }

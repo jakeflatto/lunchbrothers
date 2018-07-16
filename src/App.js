@@ -5,6 +5,8 @@ import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const axios = require('axios');
 
@@ -33,11 +35,11 @@ class Loader extends Component {
 class PunList extends Component {
   render() {
     return (
-      <ul>
+      <div>
         {this.props.items.map(item => (
-          <li key={item}><Pun pun={item} /></li>
+          <div key={item}><Pun pun={item} /></div>
         ))}
-      </ul>
+      </div>
     )
   }
 }
@@ -54,12 +56,16 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <div className="tagline">
-            Bringing you the tastiest in musical puns.
-          </div>
         </header>
         <Card className="main-card">
-
+        <CardMedia
+          className="card-media"
+          image="punch_slider.jpg"
+        />
+        <Typography variant="headline" component="h3" className="tagline">
+            Bringing you the tastiest in musical puns.
+        </Typography>
+        <br></br>
         <form onSubmit={this.handleSubmit}>
         <TextField
           id="name"
@@ -75,8 +81,10 @@ class App extends Component {
           </Button>
         </form>
         </Card>
+        <br></br>
+        <br></br>        
         {this.state.loading?  (
-          <Loader />
+          <CircularProgress />
           ) : (
           <PunList items={this.state.items} />
           )
@@ -106,7 +114,6 @@ class App extends Component {
     .then(res => {
       this.setState(prevState => ({
         items: res.data,
-        text: '',
         loading: false
       }));
     })      
