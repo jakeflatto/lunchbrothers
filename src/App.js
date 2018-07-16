@@ -36,9 +36,26 @@ class PunList extends Component {
   render() {
     return (
       <div>
-        {this.props.items.map(item => (
-          <div key={item}><Pun pun={item} /></div>
-        ))}
+      {!this.props.items.length && !this.props.loaded ? (
+        <h4 className="help-text">
+          Sorry, we couldn't find any tasty puns. Please try another selection.
+        </h4>
+        ):(
+        <div>
+          { this.props.items.length ? (
+            <div className="help-text">
+              Try one of these tasty puns:
+            </div>
+            ):(
+            <div>
+            </div>)
+          }
+          {this.props.items.map(item => (
+            <h4 key={item}><Pun pun={item} /></h4>
+          ))}
+        </div>        
+        )
+      }
       </div>
     )
   }
@@ -47,7 +64,7 @@ class PunList extends Component {
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {items: [], text: '', loading: false};
+    this.state = {items: [], text: '', loading: false, firstLoad: true};
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -86,7 +103,7 @@ class App extends Component {
         {this.state.loading?  (
           <CircularProgress />
           ) : (
-          <PunList items={this.state.items} />
+          <PunList items={this.state.items} loaded={this.state.firstLoad} />
           )
         }
       </div>
@@ -100,9 +117,14 @@ class App extends Component {
   handleSubmit(e) {
     e.preventDefault();
     this.setState(prevState => ({
-      loading: true
+      loading: true,
+      firstLoad: false
     }));
     if (!this.state.text.length) {
+      this.setState(prevState => ({
+        items: [],
+        loading: false
+      }));
       return;
     }
     const newItem = {
