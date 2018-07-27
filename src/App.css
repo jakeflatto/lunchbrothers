@@ -50,21 +50,49 @@ input {
 }
 
 .main-card {
-  width: 600px;
+  max-width: 600px;
   height: 500px;
   margin: auto;
-  margin-top: 10%;
-  margin-bottom: auto;
+  margin-top: 5%;
   padding-top: auto;
   padding-bottom: auto;
   vertical-align: middle;
   position: relative;
 }
 
+.results-card {
+  max-width: 600px;
+  max-height: 500px;
+  margin: auto;
+  margin-top: 5%;
+  padding-top: auto;
+  padding-bottom: auto;
+  vertical-align: middle;
+  position: relative;  
+}
+
 .card-media {
   height: 300px;
 }
 
-.help-text {
-  color: white;
+.results {
+  padding-top: 20px;
+}
+
+.pun-list {
+  padding: 10px;
+  margin: 25px;
+  width: 200px;
+  height: 110px;
+  display: inline-block;
+  overflow-y: scroll !important;
+}
+
+.pun-type {
+  margin-top: 10px
+}
+
+.loader {
+  margin-top: 5%;
+
 }

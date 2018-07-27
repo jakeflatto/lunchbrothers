@@ -7,26 +7,18 @@ import CardMedia from '@material-ui/core/CardMedia';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
-
+import Icon from '@material-ui/core/Icon';
+import IconButton from '@material-ui/core/IconButton';
+import InfoIcon from '@material-ui/icons/Info';
+import Tooltip from '@material-ui/core/Tooltip';
+import Zoom from '@material-ui/core/Zoom'
 const axios = require('axios');
 
 class Pun extends Component {
   render() {
     return (
       <div className="Pun">
-        <p>
           {this.props.pun}
-        </p>
-      </div>
-    )
-  }
-}
-
-class Loader extends Component {
-  render () {
-    return (
-      <div className="loader">
-        Loading{this.props.dots}
       </div>
     )
   }
@@ -35,24 +27,44 @@ class Loader extends Component {
 class PunList extends Component {
   render() {
     return (
+      <Card className="pun-list" style={{backgroundColor: "#ccaacc"}}>
+        <Typography variant="title" component="h3" className="pun-type">
+            {this.props.punType}
+          <Tooltip title={this.props.punType} placement="right" style={{overflow: "unset"}} TransitionComponent={Zoom}>
+            <IconButton>
+              <InfoIcon />
+            </IconButton>
+          </Tooltip>
+        </Typography>
+        {this.props.puns.map(item => (
+          <Typography variant="body2" key={item}><Pun pun={item} /></Typography>
+        ))}
+      </Card>
+      )
+  }
+}
+
+class Results extends Component {
+  render() {
+    return (
       <div>
-      {!this.props.items.length && !this.props.loaded ? (
+      {!this.props.homophonic.length && !this.props.compound.length && !this.props.loaded ? (
         <h4 className="help-text">
           Sorry, we couldn't find any tasty puns. Please try another selection.
         </h4>
         ):(
         <div>
-          { this.props.items.length ? (
-            <div className="help-text">
-              Try one of these tasty puns:
-            </div>
+          {!this.props.loaded ? (
+          <Card className="results-card" style={{backgroundColor: "#bbbbbb"}}>
+            <Typography variant="headline" component="h3" className="results">
+                Try one of these tasty puns:
+            </Typography>
+            <PunList puns={this.props.homophonic} punType="Homophonic" />
+            <PunList puns={this.props.compound} punType="Compound" />
+          </Card>
             ):(
-            <div>
-            </div>)
-          }
-          {this.props.items.map(item => (
-            <h4 key={item}><Pun pun={item} /></h4>
-          ))}
+            <div/>
+            )}
         </div>        
         )
       }
@@ -64,7 +76,7 @@ class PunList extends Component {
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {items: [], text: '', loading: false, firstLoad: true};
+    this.state = {homophonic: [], compound: [], text: '', loading: false, firstLoad: true};
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -82,7 +94,7 @@ class App extends Component {
         <Typography variant="headline" component="h3" className="tagline">
             Bringing you the tastiest in musical puns.
         </Typography>
-        <br></br>
+        <br/>
         <form onSubmit={this.handleSubmit}>
         <TextField
           id="name"
@@ -93,17 +105,15 @@ class App extends Component {
           margin="normal"
           fullWidth
         />
-          <Button variant="contained" color="primary" type="submit" onSubmit={this.handleSubmit}>
+          <Button variant="contained" style={{backgroundColor: "#ccaacc"}} type="submit" onSubmit={this.handleSubmit}>
             Pun-ch it up!
           </Button>
         </form>
         </Card>
-        <br></br>
-        <br></br>        
         {this.state.loading?  (
-          <CircularProgress />
+          <CircularProgress className="loader"/>
           ) : (
-          <PunList items={this.state.items} loaded={this.state.firstLoad} />
+            <Results homophonic={this.state.homophonic} compound={this.state.compound} loaded={this.state.firstLoad} />
           )
         }
       </div>
@@ -127,15 +137,12 @@ class App extends Component {
       }));
       return;
     }
-    const newItem = {
-      text: this.state.text,
-      id: Date.now()
-    };
     axios
-    .get(`https://oxc9d8m9ck.execute-api.us-west-2.amazonaws.com/prod/food-rhymes?band=${newItem.text}`)
+    .get(`https://oxc9d8m9ck.execute-api.us-west-2.amazonaws.com/dev/food-rhymes?band=${this.state.text}`)
     .then(res => {
       this.setState(prevState => ({
-        items: res.data,
+        homophonic: res.data.homophonic,
+        compound: res.data.compound,
         loading: false
       }));
     })      
