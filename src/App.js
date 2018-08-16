@@ -12,7 +12,12 @@ import IconButton from '@material-ui/core/IconButton';
 import InfoIcon from '@material-ui/icons/Info';
 import Tooltip from '@material-ui/core/Tooltip';
 import Zoom from '@material-ui/core/Zoom'
+
 const axios = require('axios');
+
+const homophonicDef = "Homophonic puns are created based on similar sounds, through the use of direct rhyme, slant rhyme, or homophones."
+const compoundDef = "Compound puns are created by combining two or more puns, words, or phrases."
+const punTypeDefs = {"Homophonic": homophonicDef, "Compound": compoundDef}
 
 class Pun extends Component {
   render() {
@@ -30,7 +35,7 @@ class PunList extends Component {
       <Card className="pun-list" style={{backgroundColor: "#ccaacc"}}>
         <Typography variant="title" component="h3" className="pun-type">
             {this.props.punType}
-          <Tooltip title={this.props.punType} placement="right" style={{overflow: "unset"}} TransitionComponent={Zoom}>
+          <Tooltip title={punTypeDefs[this.props.punType]} placement="top" TransitionComponent={Zoom}>
             <IconButton>
               <InfoIcon />
             </IconButton>
@@ -48,26 +53,28 @@ class Results extends Component {
   render() {
     return (
       <div>
+        <Card className="results-card" style={{backgroundColor: "#bbbbbb"}}>
       {!this.props.homophonic.length && !this.props.compound.length && !this.props.loaded ? (
-        <h4 className="help-text">
-          Sorry, we couldn't find any tasty puns. Please try another selection.
-        </h4>
+          <h4 className="help-text">
+            Sorry, we couldn't find any tasty puns. Please try another selection.
+          </h4>
         ):(
         <div>
           {!this.props.loaded ? (
-          <Card className="results-card" style={{backgroundColor: "#bbbbbb"}}>
-            <Typography variant="headline" component="h3" className="results">
-                Try one of these tasty puns:
-            </Typography>
-            <PunList puns={this.props.homophonic} punType="Homophonic" />
-            <PunList puns={this.props.compound} punType="Compound" />
-          </Card>
+            <div>
+              <Typography variant="headline" component="h3" className="results">
+                  Try one of these tasty puns:
+              </Typography>
+              <PunList puns={this.props.homophonic} punType="Homophonic" />
+              <PunList puns={this.props.compound} punType="Compound" />
+            </div>
             ):(
             <div/>
             )}
         </div>        
         )
       }
+        </Card>
       </div>
     )
   }
